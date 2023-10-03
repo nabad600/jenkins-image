@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.345
+FROM jenkins/jenkins:2.426
 RUN jenkins-plugin-cli --verbose --latest true --plugins \
   popper2-api:latest \
   parameter-separator:latest \
