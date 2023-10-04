@@ -1,15 +1,36 @@
-node {   
-    stage('Clone repository') {
-        git credentialsId: 'git', url: 'https://github.com/nabad600/jenkins-image.git'
-    }
-    
-    stage('Build image') {
-       dockerImage = docker.build(“nabad600/jenkins:latest")
-    }
-    
- stage('Push image') {
-        withDockerRegistry([ credentialsId: "dockerhub", url: "https://hub.docker.com/repository/docker/nabad600/jenkins/general" ]) {
-        dockerImage.push()
-        }
-    }    
+pipeline {
+environment {
+registry = "nabad600/jenkins"
+registryCredential = 'dockerhub'
+dockerImage = ''
+}
+agent any
+stages {
+stage('Cloning our Git') {
+steps {
+git 'https://github.com/YourGithubAccount/YourGithubRepository.git'
+}
+}
+stage('Building our image') {
+steps{
+script {
+dockerImage = docker.build registry + ":$BUILD_NUMBER"
+}
+}
+}
+stage('Deploy our image') {
+steps{
+script {
+docker.withRegistry( '', registryCredential ) {
+dockerImage.push()
+}
+}
+}
+}
+stage('Cleaning up') {
+steps{
+sh "docker rmi $registry:$BUILD_NUMBER"
+}
+}
+}
 }
