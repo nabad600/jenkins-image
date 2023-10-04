@@ -2,13 +2,13 @@ pipeline {
 environment {
 registry = "nabad600/jenkins"
 registryCredential = 'dockerhub'
-dockerImage = ''
+dockerImage = 'jenkins'
 }
 agent any
 stages {
 stage('Cloning our Git') {
 steps {
-git 'https://github.com/YourGithubAccount/YourGithubRepository.git'
+git 'https://github.com/nabad600/jenkins-image.git'
 }
 }
 stage('Building our image') {
