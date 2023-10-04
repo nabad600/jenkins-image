@@ -1,36 +1,25 @@
 pipeline {
-environment {
-registry = "nabad600/jenkins"
-registryCredential = 'dockerhub'
-dockerImage = 'jenkins'
-}
-agent any
-stages {
-stage('Cloning our Git') {
-steps {
-git 'https://github.com/nabad600/jenkins-image.git'
-}
-}
-stage('Building our image') {
-steps{
-script {
-dockerImage = docker.build registry + ":$BUILD_NUMBER"
-}
-}
-}
-stage('Deploy our image') {
-steps{
-script {
-docker.withRegistry( '', registryCredential ) {
-dockerImage.push()
-}
-}
-}
-}
-stage('Cleaning up') {
-steps{
-sh "docker rmi $registry:$BUILD_NUMBER"
-}
-}
-}
+    agent any
+ stages {
+  stage('Docker Build and Tag') {
+           steps {
+              
+                sh 'docker build -t nginxtest:latest .' 
+                sh 'docker tag jenkins nabad600/jenkins:latest'
+                sh 'docker tag jenkins nabad600/jenkins:$BUILD_NUMBER'
+               
+          }
+        }
+     
+  stage('Publish image to Docker Hub') {
+          
+            steps {
+        withDockerRegistry([ dockerhub: "dockerHub", url: "" ]) {
+          sh  'docker push nabad600/jenkins:latest'
+          sh  'docker push nabad600/jenkins:$BUILD_NUMBER' 
+        }
+                  
+          }
+        }
+    }
 }
