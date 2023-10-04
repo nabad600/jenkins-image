@@ -1,40 +1,12 @@
 pipeline {
-  environment {
-    imagename = "nabad600/jenkins"
-    registryCredential = 'dockerhub'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Cloning Git') {
-      steps {
-        git([url: 'https://github.com/nabad600/jenkins-image.git', branch: 'main'])
- 
-      }
-    }
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build imagename
+    agent any
+    stages {
+        stage('Build and Push Docker Image') {
+            steps {
+                container('kaniko') {
+                    sh 'kaniko --context . --dockerfile Dockerfile --destination nabad600/jenkins:latest'
+                }
+            }
         }
-      }
     }
-    stage('Deploy Image') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$BUILD_NUMBER")
-             dockerImage.push('latest')
-          }
-        }
-      }
-    }
-    stage('Remove Unused docker image') {
-      steps{
-        sh "docker rmi $imagename:$BUILD_NUMBER"
-         sh "docker rmi $imagename:latest"
- 
-      }
-    }
-  }
 }
