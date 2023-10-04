@@ -9,17 +9,6 @@ pipeline {
         env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
   agent any
-
-    
-          
-            
-    
-
-          
-          Expand Down
-    
-    
-  
   stages {
     stage('Cloning Git') {
       steps {
