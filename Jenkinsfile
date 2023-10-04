@@ -4,8 +4,8 @@ pipeline {
     registryCredential = 'dockerhub'
     dockerImage = ''
   }
- stage('Initialize'){
-        def dockerHome = tool 'mydocker'
+  stage('Initialize'){
+        def dockerHome = tool 'myDocker'
         env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
   agent any
