@@ -1,31 +1,55 @@
 pipeline {
-  agent any
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
   environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+    imagename = "nabad600/jenkins"
+    registryCredential = 'dockerhub'
+    dockerImage = ''
   }
+ stage('Initialize'){
+        def dockerHome = tool 'mydocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
+  agent any
+
+    
+          
+            
+    
+
+          
+          Expand Down
+    
+    
+  
   stages {
-    stage('Build') {
+    stage('Cloning Git') {
       steps {
-        sh 'docker build -t nabad600/jenkins .'
+        git([url: 'https://github.com/nabad600/jenkins-image.git', branch: 'main'])
+ 
       }
     }
-    stage('Login') {
-      steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build imagename
+        }
       }
     }
-    stage('Push') {
-      steps {
-        sh 'docker push nabad600/jenkins-docker-hub'
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+          }
+        }
       }
     }
-  }
-  post {
-    always {
-      sh 'docker logout'
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $imagename:$BUILD_NUMBER"
+         sh "docker rmi $imagename:latest"
+ 
+      }
     }
   }
 }
