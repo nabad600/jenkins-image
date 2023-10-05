@@ -19,7 +19,7 @@ pipeline {
         script {
           def currentDate = new Date().format("MM-dd-yyyy-HH-mm")
           def customTag = params.TAG_NUMBER ?: 'latest'
-          sh "docker build -t my-image:${customTag}-${currentDate} ."
+          sh "docker build -t ${imagename}:${customTag}-${currentDate} ."
         }
       }
     }
