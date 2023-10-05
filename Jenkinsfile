@@ -20,21 +20,21 @@ pipeline {
         }
       }
     }
-    stage('Deploy Image') {
-      steps{
-        script {
-          def customTag = params.TAG_NUMBER ?: 'latest'
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$customTag")
-          }
-        }
-      }
-    }
-    stage('Remove Unused docker image') {
-      steps{
-        sh "docker rmi $imagename:$customTag"
+    // stage('Deploy Image') {
+    //   steps{
+    //     script {
+    //       def customTag = params.TAG_NUMBER ?: 'latest'
+    //       docker.withRegistry( '', registryCredential ) {
+    //         dockerImage.push("$customTag")
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Remove Unused docker image') {
+    //   steps{
+    //     sh "docker rmi $imagename:$customTag"
  
-      }
-    }
+    //   }
+    // }
   }
 }
