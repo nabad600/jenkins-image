@@ -27,8 +27,8 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            customTag = params.TAG_NUMBER ?: 'latest'
-            dockerImage.push("$customTag")
+            // customTag = params.TAG_NUMBER ?: 'latest'
+            dockerImage.push("$TAG_NUMBER")
           }
         }
       }
