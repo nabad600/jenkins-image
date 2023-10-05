@@ -3,7 +3,8 @@ pipeline {
     imagename = "nabad600/jenkins"
     registryCredential = 'dockerhub'
     dockerImage = ''
-    BUILD_DATE=$(date -u +'%m-%d-%Y%H-%M')
+    BUILD_DATE = $(date -u +'%m-%d-%Y%H-%M')
+    TAG_NUMBER = ''
     // string(name: 'TAG_NUMBER', defaultValue: 'latest', description: 'Docker image tag number')
     // CUSTOM_BUILD_NUMBER = "${customTag}-${BUILD_DATE}"
   }
