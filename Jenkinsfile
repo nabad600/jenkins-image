@@ -4,6 +4,7 @@ pipeline {
     registryCredential = 'dockerhub'
     dockerImage = ''
     // BUILD_DATE = $(date -u +'%m-%d-%Y%H-%M')
+    string(name: 'TAG_NUMBER', defaultValue: 'latest', description: 'Docker image tag number')
   }
   agent any
   stages {
@@ -16,7 +17,8 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build imagename
+          def customTag = params.TAG_NUMBER ?: 'latest'
+          sh "docker build -t my-image:${customTag} ."
         }
       }
     }
