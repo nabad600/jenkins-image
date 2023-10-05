@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'dockerhub'
     dockerImage = ''
     BUILD_DATE=$(date -u +'%m-%d-%Y%H-%M')
-    string(name: 'TAG_NUMBER', defaultValue: 'latest', description: 'Docker image tag number')
+    // string(name: 'TAG_NUMBER', defaultValue: 'latest', description: 'Docker image tag number')
     // CUSTOM_BUILD_NUMBER = "${customTag}-${BUILD_DATE}"
   }
   agent any
