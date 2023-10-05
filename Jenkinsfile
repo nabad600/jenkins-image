@@ -5,8 +5,6 @@ pipeline {
     dockerImage = ''
     BUILD_DATE = $(date -u +'%m-%d-%Y%H-%M')
     TAG_NUMBER = ''
-    // string(name: 'TAG_NUMBER', defaultValue: 'latest', description: 'Docker image tag number')
-    // CUSTOM_BUILD_NUMBER = "${customTag}-${BUILD_DATE}"
   }
   agent any
   stages {
@@ -27,7 +25,6 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            // customTag = params.TAG_NUMBER ?: 'latest'
             dockerImage.push("$TAG_NUMBER")
           }
         }
@@ -35,7 +32,7 @@ pipeline {
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $imagename:$customTag"
+        sh "docker rmi $imagename:$TAG_NUMBER"
  
       }
     }
