@@ -25,7 +25,8 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("${imagename}:${customTag}-${currentDate}")
+            // dockerImage.push("${imagename}:${customTag}-${currentDate}")
+            dockerImage.push("$imagename:$customTag-$currentDate")
           }
         }
       }
