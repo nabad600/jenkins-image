@@ -18,7 +18,7 @@ pipeline {
       steps{
         script {
           def customTag = params.TAG_NUMBER ?: 'latest'
-          sh "docker build -t my-image:${customTag} ."
+          sh "docker build -t my-image:${customTag}-$(date -u +'%m-%d-%Y%H-%M') ."
         }
       }
     }
