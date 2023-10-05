@@ -1,4 +1,9 @@
 FROM jenkins/jenkins:2.426
+USER root
+RUN apt update
+RUN apt install -y docker docker.io
+RUN usermod -aG docker jenkins
+RUN groupmod -g 120 jenkins
 RUN jenkins-plugin-cli --verbose --latest true --plugins \
   popper2-api:latest \
   parameter-separator:latest \
