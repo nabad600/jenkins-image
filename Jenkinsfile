@@ -3,7 +3,7 @@ pipeline {
     imagename = "nabad600/jenkins"
     registryCredential = 'dockerhub'
     dockerImage = ''
-    BUILD_DATE = $(date -u +'%m-%d-%Y%H-%M')
+    // BUILD_DATE = $(date -u +'%m-%d-%Y%H-%M')
   }
   agent any
   stages {
