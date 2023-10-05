@@ -17,7 +17,8 @@ pipeline {
         script {
           def currentDate = new Date().format("MM-dd-yyyy-HH-mm")
           def customTag = params.TAG_NUMBER ?: 'latest'
-          sh "docker build -t ${imagename}:${customTag}-${currentDate} ."
+          tag = ${customTag}-${currentDate}
+          sh "docker build -t ${imagename}:${tag} ."
         }
       }
     }
@@ -25,14 +26,14 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            sh "docker push ${imagename}:${customTag}-${currentDate}"
+            dockerImage.push("$tag")
           }
         }
       }
     }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi ${imagename}:${customTag}-${currentDate}"
+        sh "docker rmi $imagename:$tag"
  
       }
     }
