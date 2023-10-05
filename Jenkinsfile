@@ -21,9 +21,18 @@ pipeline {
         }
       }
     }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push${imagename}:${customTag}-${currentDate}
+          }
+        }
+      }
+    }
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $imagename:$customTag"
+        sh "docker rmi ${imagename}:${customTag}-${currentDate}"
  
       }
     }
